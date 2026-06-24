@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tuteee – Personal Tutor</title>
+  <meta name="description" content="Your personal AI tutor for mastering your semesters.">
+  <meta property="og:title" content="Tuteee – Personal Tutor">
+  <meta property="og:description" content="Your personal AI tutor for mastering your semesters.">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="/favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      /* App Palette Theme Mapping */
+      --bg: #FFFDF9;                  /* Cream background */
+      --bg-secondary: #FDF8F0;        /* Slightly darker cream for depth */
+      --bg-card: #FFFFFF;             /* Crisp white for content container cards */
+      --text-primary: #4A3728;        /* Main dark brown/chocolate accent text */
+      --text-secondary: #6B5340;      /* Muted brown body text */
+      --text-tertiary: #8C735E;       /* Light brown description/eyebrow text */
+      --accent: #E3F2FD;              /* Sem 1 Light Blue */
+      --button-primary: #4A3728;      /* Primary solid button */
+      --button-primary-hover: #5C4634;/* Button hover state */
+      --border: #EFE6DD;              /* Soft grid lines and divider lines */
+      --border-subtle: #F5EDE4;       
+
+      /* Pastel Accent Blocks for visuals/decorations derived from Semesters */
+      --sem1: #E3F2FD;
+      --sem2: #E8F5E9;
+      --sem3: #F3E5F5;
+      --sem4: #FFF8E1;
+      --sem5: #FCE4EC;
+      --sem6: #E8EAF6;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(227,242,253,0.4) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(252,228,236,0.4) 0%, transparent 50%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ─── HERO ─── */
+    .container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .content-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      max-width: 1200px;
+      width: 100%;
+      align-items: center;
+    }
+
+    .app-showcase {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      animation: fadeIn 0.8s ease-out 0.2s both;
+    }
+    .app-showcase::before {
+      content: '';
+      position: absolute;
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(243,229,245,0.6) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: -1;
+    }
+
+    .app-demo-img {
+      width: 100%;
+      max-width: 460px;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 40px rgba(74,55,40,0.12));
+      animation: float 6s ease-in-out infinite;
+      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+      border-radius: 40px;
+    }
+    .app-demo-img:hover {
+      transform: translateY(-5px) scale(1.02);
+      filter: drop-shadow(0 30px 50px rgba(74,55,40,0.18));
+    }
+
+    .content { animation: fadeIn 0.8s ease-out; }
+
+    .logo {
+      width: 56px; height: 56px;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeInUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
+      background: var(--text-primary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      color: var(--bg);
+      font-weight: bold;
+    }
+    .logo:hover { transform: scale(1.1); transition: transform 0.3s ease; }
+
+    @keyframes fadeIn { from {opacity:0} to {opacity:1} }
+    @keyframes fadeInUp {
+      from { opacity:0; transform:translateY(30px) }
+      to   { opacity:1; transform:translateY(0)   }
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0) }
+      50%     { transform: translateY(-10px) }
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 6vw, 5rem);
+      letter-spacing: 0.05em;
+      line-height: 1;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      opacity: 0;
+      animation: fadeInUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.4s forwards;
+    }
+
+    .subtitle {
+      font-size: clamp(1.125rem, 2vw, 1.5rem);
+      letter-spacing: 0.02em;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeInUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.6s forwards;
+    }
+
+    .download-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 4rem;
+      opacity: 0;
+      animation: fadeInUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.7s forwards;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 32px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .download-btn.google-play {
+      background: var(--button-primary);
+      color: var(--bg);
+      border: 2px solid var(--button-primary);
+    }
+    .download-btn.google-play::before {
+      content: '';
+      position: absolute;
+      top:50%; left:50%;
+      width:0; height:0;
+      border-radius:50%;
+      background:rgba(255,255,255,0.15);
+      transform:translate(-50%,-50%);
+      transition:width 0.6s, height 0.6s;
+    }
+    .download-btn.google-play:hover::before {
+      width:300px; height:300px;
+    }
+    .download-btn.google-play:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(74,55,40,0.2);
+      background: var(--button-primary-hover);
+    }
+
+    .download-btn svg { width:20px; height:20px; z-index:1 }
+    .download-btn span { z-index:1 }
+
+    /* ─── SECTION SHARED ─── */
+    .section {
+      position: relative;
+      z-index: 2;
+      padding: 7rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 1rem;
+    }
+
+    .section-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 3.75rem);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--text-primary);
+      margin-bottom: 1.25rem;
+    }
+
+    .section-subheading {
+      font-size: 1.0625rem;
+      color: var(--text-secondary);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ─── SCREENSHOTS ─── */
+    .screenshots-section {
+      position: relative;
+      z-index: 2;
+      padding: 7rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .screenshots-header {
+      margin-bottom: 3.5rem;
+    }
+
+    .screenshots-scroll-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 1rem;
+    }
+    .screenshots-scroll-wrapper::-webkit-scrollbar { display: none; }
+
+    .screenshots-track {
+      display: flex;
+      gap: 1.25rem;
+      width: max-content;
+    }
+
+    .screenshot-card {
+      flex-shrink: 0;
+      width: 220px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s cubic-bezier(0.16,1,0.3,1);
+      cursor: default;
+    }
+    .screenshot-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(74,55,40,0.1);
+    }
+
+    .screenshot-card img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .screenshot-label {
+      padding: 0.875rem 1rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.01em;
+    }
+
+    .screenshot-placeholder {
+      width: 100%;
+      aspect-ratio: 9/19;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .screenshot-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Scroll hint fade background sync */
+    .screenshots-fade {
+      position: relative;
+    }
+    .screenshots-fade::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 80px; height: 100%;
+      background: linear-gradient(to right, transparent, var(--bg));
+      pointer-events: none;
+    }
+
+    /* ─── FEATURES ─── */
+    .features-section {
+      position: relative;
+      z-index: 2;
+      padding: 7rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .features-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+      margin-top: 3.5rem;
+    }
+
+    .features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0px;
+    }
+
+    .feature-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.25rem;
+      padding: 1.75rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+      cursor: default;
+      position: relative;
+    }
+    .feature-item:first-child {
+      border-top: 1px solid var(--border);
+    }
+    .feature-item::before {
+      content: '';
+      position: absolute;
+      left: -1.5rem;
+      top: 0; bottom: 0;
+      width: 3px;
+      background: var(--text-primary);
+      transform: scaleY(0);
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+      transform-origin: top;
+    }
+    .feature-item:hover::before {
+      transform: scaleY(1);
+    }
+
+    /* Distribute colors cleanly onto icons on hover */
+    .feature-item:nth-of-type(1):hover .feature-icon { background: var(--sem1); }
+    .feature-item:nth-of-type(2):hover .feature-icon { background: var(--sem2); }
+    .feature-item:nth-of-type(3):hover .feature-icon { background: var(--sem3); }
+    .feature-item:nth-of-type(4):hover .feature-icon { background: var(--sem4); }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: background 0.25s, border-color 0.25s, transform 0.25s;
+    }
+    .feature-item:hover .feature-icon {
+      border-color: transparent;
+      transform: scale(1.05);
+    }
+
+    .feature-icon svg {
+      width: 18px;
+      height: 18px;
+      color: var(--text-secondary);
+      transition: color 0.25s, stroke 0.25s;
+    }
+    .feature-item:hover .feature-icon svg {
+      color: var(--text-primary);
+    }
+
+    .feature-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.35rem;
+      letter-spacing: 0.01em;
+    }
+    .feature-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* ─── CTA FOOTER STRIP ─── */
+    .cta-strip {
+      position: relative;
+      z-index: 2;
+      padding: 6rem 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      background: var(--bg-secondary);
+    }
+
+    .cta-strip .section-heading {
+      margin-bottom: 0.75rem;
+    }
+    .cta-strip .section-subheading {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2.5rem;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .features-layout {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .content-wrapper {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        text-align: center;
+      }
+      .app-showcase { order: 1 }
+      .content      { order: 2 }
+      .download-buttons { flex-direction: column; align-items: center }
+      .app-demo-img { max-width: 380px }
+
+      .section,
+      .screenshots-section,
+      .features-section { padding: 5rem 1.5rem; }
+      .section-subheading { max-width: 100%; }
+      .screenshot-card { width: 180px; }
+      .feature-item { padding: 1.5rem 0; }
+      .feature-item::before { left: -1rem; }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 1.5rem }
+      h1 { font-size: 3rem; margin-bottom: 0.75rem }
+      .subtitle { font-size: 1.25rem; margin-bottom: 1rem }
+      .app-demo-img { max-width: 260px }
+    }
+
+    /* scroll-reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="content-wrapper">
+      <div class="app-showcase">
+        <img src="1.png" 
+             alt="Tuteee app dashboard showcasing color themed semesters grids."
+             class="app-demo-img" style="width: 250px;">
+      </div>
+      <div class="content">
+        <h1>SU</h1>
+        <p class="subtitle">All-in-One Study Material & Lab Guide</p>
+
+        <div class="download-buttons">
+          <a href="https://github.com/Christo790/SU-APP/releases/download/v1.0.4/app-release.apk"
+             class="download-btn google-play" aria-label="Get it on Google Play"
+             target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 512 512" fill="currentColor"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L69.1 523.9l35.5-24.9z"/></svg>
+            <span>Download App</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="screenshots-section">
+    <div class="screenshots-header reveal">
+      <p class="section-eyebrow">The App</p>
+      <h2 class="section-heading">See it in action</h2>
+      <p class="section-subheading">A clean interface built to deliver study materials and error-free lab codes, fast.</p>
+    </div>
+
+    <div class="screenshots-fade reveal reveal-delay-2">
+      <div class="screenshots-scroll-wrapper">
+        <div class="screenshots-track">
+
+          <div class="screenshot-card">
+            <div class="screenshot-placeholder" style="background: var(--sem1);">
+              <img src="1.png" alt="Semester 1 structure preview">
+            </div>
+            <div class="screenshot-label">Home Page</div>
+          </div>
+
+          <div class="screenshot-card">
+            <div class="screenshot-placeholder" style="background: var(--sem2);">
+              <img src="3.png" alt="Step-by-step tracks preview">
+            </div>
+            <div class="screenshot-label">Subject Folders</div>
+          </div>
+
+          <div class="screenshot-card">
+            <div class="screenshot-placeholder" style="background: var(--sem3);">
+              <img src="4.png" alt="Concept breakdowns preview">
+            </div>
+            <div class="screenshot-label">Lab File Lists</div>
+          </div>
+
+          <div class="screenshot-card">
+            <div class="screenshot-placeholder" style="background: var(--sem4);">
+              <img src="5.png" alt="Practice blueprints preview">
+            </div>
+            <div class="screenshot-label">Clean Code Viewer</div>
+          </div>
+
+          <div class="screenshot-card">
+            <div class="screenshot-placeholder" style="background: var(--sem5);">
+              <img src="2.png" alt="Progress tracking preview">
+            </div>
+            <div class="screenshot-label">App Features Hub</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  
+
+  <div class="cta-strip reveal">
+    <h2 class="section-heading">Download Now</h2>
+    <p class="section-subheading">Get started on your roadmap to a better semester profile.</p>
+
+    <div class="cta-buttons">
+      <a href="https://github.com/Christo790/SU-APP/releases/download/v1.0.4/app-release.apk"
+         class="download-btn google-play" aria-label="Get it on Google Play"
+         target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 512 512" fill="currentColor"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L69.1 523.9l35.5-24.9z"/></svg>
+        <span>Download</span>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Scroll-reveal Intersection Observer
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
